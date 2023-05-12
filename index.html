@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Adverb Counter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 0 5%;
+            margin: 20px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        #inputText {
+            width: 100%;
+            height: 200px;
+            margin-bottom: 10px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .highlight {
+            background-color: yellow;
+        }
+
+        #adverbCount {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        #adverbTable {
+            margin-top: 20px;
+        }
+
+        footer {
+            margin-top: 50px;
+            text-align: center;
+            color: #888;
+        }
+
+        footer a {
+            color: #888;
+            text-decoration: none;
+        }
+
+        /* Responsive styles */
+        @media only screen and (max-width: 600px) {
+            body {
+                padding: 0 10px;
+                margin: 10px;
+            }
+
+            #inputText {
+                height: 150px;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <h1>Adverb Counter</h1>
+
+    <p>As author Stephen King once said, "The road to hell is paved with adverbs." Use this tool to identify and root out adverbs.</p>
+
+    <textarea id="inputText" rows="10" placeholder="Enter your text here"></textarea>
+    <br>
+    <center>
+    <button onclick="countAndHighlightAdverbs()">Count and Highlight Adverbs</button>
+    <p><span id="adverbCount"></span> <span>  ---  </span>  <span id="adverbPercentage"></span></p>
+</center>
+    <br>
+    <center>
+    <div id="adverbTable"></div>
+</center>
+    <footer>
+        Created by Michael Sitver |
+        <a style = "color: blue" href="https://twitter.com/msitver" target="_blank">Follow me on Twitter</a>
+    </footer>
+    <script>
+        function countAndHighlightAdverbs() {
+            // Get the input text
+            var inputText = document.getElementById("inputText").value;
+    
+            // Split the text into words
+            var words = inputText.split(/\b/); // Split on word boundaries
+    
+            // Initialize the adverb count and total word count
+            var adverbCount = 0;
+            var totalWordCount = 0;
+    
+            // Create an object to store the adverb frequency
+            var adverbFrequency = {};
+    
+            // Define a list of common words ending in "ly" that are not adverbs
+            var nonAdverbWords = [
+                "absolutely", "likely", "suddenly", "completely", "nearly", "totally",
+                "apparently", "deeply", "obviously", "truly", "awfully", "directly", "particularly",
+                "basically", "easily", "presumably", "usually",
+                "carefully", "fairly", "promptly", "widely", "clearly", "frankly",
+                "comparatively", "frequently", "probably", "correctly", "generally", "roughly",
+                "crudely", "hardly", "quickly", "daily", "honestly", "largely", "yearly",
+                "deadly", "hourly", "rarely", "dearly", "largely"
+            ]; // Add more if needed
+    
+            // Iterate over each word
+            for (var i = 0; i < words.length; i++) {
+                var word = words[i];
+    
+                // Remove any leading or trailing punctuation from the word
+                word = word.replace(/^[^\w]+|[^\w]+$/g, "");
+    
+                // Check if the word ends with "ly" and is not in the list of non-adverb words
+                if (/\b\w*ly\b/i.test(word) && !nonAdverbWords.includes(word.toLowerCase()) && !/^[A-Z][a-z]*$/.test(word)) {
+                    // Increment the adverb count
+                    adverbCount++;
+    
+                    // Store the adverb in the frequency object
+                    adverbFrequency[word] = (adverbFrequency[word] || 0) + 1;
+    
+                    // Highlight the adverb by wrapping it in a span with a 'highlight' class
+                    words[i] = "<span class='highlight'>" + word + "</span>";
+                }
+    
+                // Increment the total word count
+                totalWordCount++;
+            }
+    
+            // Sort the adverbs by frequency in descending order
+            var sortedAdverbs = Object.keys(adverbFrequency).sort(function(a, b) {
+                return adverbFrequency[b] - adverbFrequency[a];
+            });
+    
+            // Calculate the percentage of words that are adverbs
+            var adverbPercentage = (adverbCount / totalWordCount * 100).toFixed(2);
+    
+            // Join the words back into a single string
+            var highlightedText = words.join("");
+    
+            // Update the input text with the highlighted adverbs
+            document.getElementById("inputText").value = highlightedText;
+    
+            // Display the adverb count
+            document.getElementById("adverbCount").innerText = "Total Adverbs: " + adverbCount;
+    
+            // Display the percentage of words that are adverbs
+            document.getElementById("adverbPercentage").innerText = "Adverb Percentage: " + adverbPercentage + "%";
+    
+            // Display the list of adverbs by frequency in a table
+            var table = "<table>";
+                        // Display the percentage of words that are adverbs
+        document.getElementById("adverbPercentage").innerText = "Adverb Percentage: " + adverbPercentage + "%";
+        // Display the list of adverbs by frequency in a table
+        var table = "<table>";
+        table += "<tr><th>Adverb</th><th>Frequency</th></tr>";
+        for (var j = 0; j < sortedAdverbs.length; j++) {
+            var adverb = sortedAdverbs[j];
+            var frequency = adverbFrequency[adverb];
+            table += "<tr><td>" + adverb + "</td><td>" + frequency + "</td></tr>";
+        }
+        table += "</table>";
+
+        // Update the adverb table with the generated HTML
+        document.getElementById("adverbTable").innerHTML = table;
+        }
+        </script>
+
+           
+    
+</body>
+</html>
+
+    
+    
+</body>
+</html>
